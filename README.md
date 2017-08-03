@@ -48,6 +48,14 @@ uid                             Muneeb Ali (See http://muneebali.com) <muneeb@al
 sub   rsa4096/0x0C1F397D12E6F05D 2014-03-28 [E]
 ```
 
+Or import the key directly:
+```bash
+$ ./blockstack_gpg/main.py muneeb.id | gpg --import
+gpg: key 0x639C89272AFEC540: public key "Muneeb Ali (See http://muneebali.com) <muneeb@ali.vc>" imported
+gpg: Total number processed: 1
+gpg:               imported: 1
+```
+
 ## License
 
 This code is published under the [GNU General Public License v3.0](LICENSE.md).
