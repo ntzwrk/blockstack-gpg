@@ -40,7 +40,12 @@ optional arguments:
 
 You can pipe the output directly into GPG:
 ```bash
-$ ./blockstack_gpg/main.py ryan.id | gpg
+$ ./blockstack_gpg/main.py muneeb.id | gpg
+gpg: WARNING: no command supplied.  Trying to guess what you mean ...
+pub   rsa4096/0x639C89272AFEC540 2014-03-28 [SC]
+      Key fingerprint = 9862 A3FB 338B E9EB 6C6A  5E05 639C 8927 2AFE C540
+uid                             Muneeb Ali (See http://muneebali.com) <muneeb@ali.vc>
+sub   rsa4096/0x0C1F397D12E6F05D 2014-03-28 [E]
 ```
 
 ## License
