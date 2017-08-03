@@ -11,10 +11,6 @@ Then run the setup script
 ```bash
 $ ./setup.py install
 ```
-And install a custom version of the GnuPG library (as the other one is broken)
-```bash
-$ pip install https://github.com/SexualHealthInnovations/python-gnupg/tarball/issue157#egg=gnupg
-```
 
 ## Usage
 
