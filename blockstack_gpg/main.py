@@ -75,10 +75,11 @@ def getKeys(accounts, id):
 # Tries to detect a valid fingerprint, then strips all whitespaces and transforms to upper case
 # Returns the formatted fingerprint or None
 def cleanFingerprint(fingerprint):
+	fingerprint = fingerprint.replace(" ", "")
+
 	match = re.search("(?:0x)?([0-9a-f]{8,40})", fingerprint, re.IGNORECASE)
 	if match:
 		cleanedFingerprint = match.group(1)
-		cleanedFingerprint = cleanedFingerprint.replace(" ", "")
 		cleanedFingerprint = cleanedFingerprint.upper()
 	else:
 		cleanedFingerprint = None
