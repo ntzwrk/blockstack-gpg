@@ -10,9 +10,10 @@ parser = argparse.ArgumentParser(description="Fetches and verifies GnuPG keys fr
 parser.add_argument("ids", metavar="id", nargs="+", help="Blockstack ID to fetch")
 parser.add_argument("--all", dest="printAll", action="store_true", help="print all found keys (default: print only first)")
 parser.add_argument("--i-really-want-unverified-keys", dest="dontVerify", action="store_true", help="don't verify keys against the provided fingerprint (default: verify keys)")
+parser.add_argument("--disable-fingerprint-length-check", dest="disableLengthCheck", action="store_true", help="Disables security length check for the given fingerprint (default: not active)")
 parser.add_argument("-s", "--silent", dest="silent", action="store_true", help="prints nothing except a key / nothing on failure (default: not active)")
 parser.add_argument("--debug", dest="debug", action="store_true", help="prints verbose debug information (default: not active)")
-parser.set_defaults(printAll=False, dontVerify=False)
+parser.set_defaults(printAll=False, dontVerify=False, disableLengthCheck=False)
 
 args = parser.parse_args()
 
