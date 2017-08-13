@@ -48,13 +48,14 @@ def getKeys(accounts, id):
 						print("Error while fetching key from \"%s\"" % account["contentUrl"])
 					return;
 
-				if not args.silent:
-					print("PGP key for \"%s\":" % id)
-
 				if args.dontVerify:
+					if not args.silent:
+						print("PGP key for \"%s\":" % id)
 					print(key)
 				else:
 					if verifyFingerprint(key, account["identifier"]):
+						if not args.silent:
+							print("PGP key for \"%s\":" % id)
 						print(key)
 					elif not args.silent:
 						print("Couldn't verify fingerprint against key")
