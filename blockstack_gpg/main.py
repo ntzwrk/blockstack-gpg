@@ -23,7 +23,8 @@ def getKeys(accounts, id):
 	keyFound = False
 
 	if not "accounts" in accounts:
-		print("Couldn't find valid profile information for \"%s\"" % id)
+		if not args.silent:
+			print("Couldn't find valid profile information for \"%s\"" % id)
 		if args.debug:
 			print("Accounts: %s" % accounts)
 		return;
