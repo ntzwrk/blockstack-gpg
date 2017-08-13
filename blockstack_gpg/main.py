@@ -19,9 +19,11 @@ args = parser.parse_args()
 
 
 
+# Processes PGP keys of a given Blockstack ID and its profile accounts
 def getKeys(accounts, id):
 	keyFound = False
 
+	# Fail when cannot find formatted account data
 	if not "accounts" in accounts:
 		if not args.silent:
 			print("Couldn't find valid profile information for \"%s\"" % id)
@@ -32,8 +34,11 @@ def getKeys(accounts, id):
 	if args.debug:
 		print("%s's accounts: %s" % (id, accounts))
 
+	# Cycle through all accounts...
 	for account in accounts["accounts"]:
+		# ...and look for accounts that fit the PGP format
 		if account["@type"] == "Account" and account["service"] == "pgp":
+			# Continues if it should print all keys or no key found yet
 			if not args.printAll and not keyFound:
 				keyFound = True
 
@@ -41,6 +46,7 @@ def getKeys(accounts, id):
 					print("Identifier: %s" % account["identifier"])
 					print("Key URL   : %s" % account["contentUrl"])
 
+				# Try to download from the given key url
 				try:
 					key = urllib2.urlopen(account["contentUrl"]).read()
 				except Exception:
@@ -48,10 +54,12 @@ def getKeys(accounts, id):
 						print("Error while fetching key from \"%s\"" % account["contentUrl"])
 					return;
 
+				# Print without check when dontVerify is True
 				if args.dontVerify:
 					if not args.silent:
 						print("PGP key for \"%s\":" % id)
 					print(key)
+				# Verify fingerprints otherwise
 				else:
 					if verifyFingerprint(key, account["identifier"]):
 						if not args.silent:
@@ -63,6 +71,9 @@ def getKeys(accounts, id):
 	if not keyFound and not args.silent:
 		print("No PGP keys found for \"%s\"" % id)
 
+
+# Tries to detect a valid fingerprint, then strips all whitespaces and transforms to upper case
+# Returns the formatted fingerprint or None
 def cleanFingerprint(fingerprint):
 	match = re.search("(?:0x)?([0-9a-f]{8,40})", fingerprint, re.IGNORECASE)
 	if match:
@@ -79,9 +90,12 @@ def cleanFingerprint(fingerprint):
 	return cleanedFingerprint
 
 
+# Verifies a key against a given fingerprint, might print some hints
+# Returns True when both match, otherwise False
 def verifyFingerprint(keyData, expectedFingerprint):
 	expectedFinerprint = cleanFingerprint(expectedFingerprint)
 
+	# Try to import key and retrieve fingerprint
 	try:
 		key, _ = pgpy.PGPKey.from_blob(keyData)
 		fingerprint = key.fingerprint
@@ -93,6 +107,8 @@ def verifyFingerprint(keyData, expectedFingerprint):
 			print("Exception: %s" % e)
 		return False
 
+	# Check whether the given fingerprint is long enough to be secure
+	# (unless the check is disabled)
 	if not args.disableLengthCheck and len(expectedFingerprint) < FINGERPRINT_MIN_LEN:
 		if not args.silent:
 			print("Fingerprint \"%s\" is too short to be secure, fingerprint needs more than %s characters" % (expectedFingerprint, FINGERPRINT_MIN_LEN))
@@ -101,6 +117,7 @@ def verifyFingerprint(keyData, expectedFingerprint):
 	if args.debug:
 		print("Comparing given fingerprint \"%s\" with calculated fingerprint \"%s\"" % (expectedFingerprint, fingerprint))
 
+	# Return whether both (the given and calculated) fingerprints match
 	return fingerprint.endswith(expectedFingerprint)
 
 
@@ -108,6 +125,7 @@ def verifyFingerprint(keyData, expectedFingerprint):
 if args.debug:
 	print("Names to lookup: %s" % args.ids)
 
+# Cycle through all given IDs and process their respective profile information
 for id in args.ids:
 	accounts = profile_list_accounts(id)
 	getKeys(accounts, id)
