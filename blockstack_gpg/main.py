@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 import sys, argparse, urllib2, re
-import gnupg
+import pgpy
 from blockstack_client.profile import profile_list_accounts
 
 FINGERPRINT_MIN_LEN = 16
@@ -54,10 +54,6 @@ def getKeys(accounts, id):
 				if args.dontVerify:
 					print(key)
 				else:
-					if len(account["identifier"]) < FINGERPRINT_MIN_LEN and not args._silent:
-						print("Given fingerprint is too short to be secure")
-						return;
-
 					if verifyFingerprint(key, account["identifier"]):
 						print(key)
 					elif not args.silent:
@@ -70,13 +66,41 @@ def cleanFingerprint(fingerprint):
 	match = re.search("(?:0x)?([0-9a-f]{8,40})", fingerprint, re.IGNORECASE)
 	if match:
 		cleanedFingerprint = match.group(1)
-		return cleanedFingerprint.replace(" ", "").upper()
+		cleanedFingerprint = cleanedFingerprint.replace(" ", "")
+		cleanedFingerprint = cleanedFingerprint.upper()
+	else:
+		cleanedFingerprint = None
 
-def verifyFingerprint(key, fingerprint):
-	gpg = gnupg.GPG(homedir="/tmp/blockstack-gpg/gpghome")
-	importedKey = gpg.import_keys(key)
+	if args.debug:
+		print("Given fingerprint:  %s" % fingerprint)
+		print("Cleaned finerprint: %s" % cleanedFingerprint)
 
-	return importedKey.results[0]["fingerprint"].endswith(fingerprint)
+	return cleanedFingerprint
+
+
+def verifyFingerprint(keyData, expectedFingerprint):
+	expectedFinerprint = cleanFingerprint(expectedFingerprint)
+
+	try:
+		key, _ = pgpy.PGPKey.from_blob(keyData)
+		fingerprint = key.fingerprint
+		fingerprint = fingerprint.replace(" ", "")
+	except Exception as e:
+		if not args.silent:
+			print("Error while importing key, probably wasn't able to find a valid key")
+		if args.debug:
+			print("Exception: %s" % e)
+		return False
+
+	if not args.disableLengthCheck and len(expectedFingerprint) < FINGERPRINT_MIN_LEN:
+		if not args.silent:
+			print("Fingerprint \"%s\" is too short to be secure, fingerprint needs more than %s characters" % (expectedFingerprint, FINGERPRINT_MIN_LEN))
+		return False
+
+	if args.debug:
+		print("Comparing given fingerprint \"%s\" with calculated fingerprint \"%s\"" % (expectedFingerprint, fingerprint))
+
+	return fingerprint.endswith(expectedFingerprint)
 
 
 
