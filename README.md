@@ -9,7 +9,7 @@ $ cd blockstack-gpg
 ```
 Then run the setup script
 ```bash
-$ ./setup.py install
+$ ./setup.py install --user
 ```
 
 ## Usage
