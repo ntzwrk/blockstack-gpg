@@ -13,9 +13,8 @@ setup(
 	author_email="contact@ntzwrk.org",
 	description="Download and verify GPG keys from blockstack",
 	packages=find_packages(),
-	dependency_links = ['https://github.com/SexualHealthInnovations/python-gnupg/tarball/issue157#egg=gnupg-unknown'],
 	install_requires=[
 		"blockstack>=0.14.3",
-		"gnupg==unknown"
+		"pgpy>=0.4.0"
 	],
 )
