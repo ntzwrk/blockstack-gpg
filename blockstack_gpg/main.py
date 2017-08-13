@@ -39,7 +39,7 @@ def getKeys(accounts, id):
 		# ...and look for accounts that fit the PGP format
 		if account["@type"] == "Account" and account["service"] == "pgp":
 			# Continues if it should print all keys or no key found yet
-			if not args.printAll and not keyFound:
+			if not args.printAll or not keyFound:
 				keyFound = True
 
 				if args.debug:
