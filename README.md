@@ -15,7 +15,8 @@ $ ./setup.py install --user
 ## Usage
 
 ```bash
-usage: main.py [-h] [--all] [--i-really-want-unverified-keys] [-s] [--debug]
+usage: main.py [-h] [--all] [--i-really-want-unverified-keys]
+               [--disable-fingerprint-length-check] [-s] [--debug]
                id [id ...]
 
 Fetches and verifies GnuPG keys from Blockstack IDs.
@@ -29,6 +30,9 @@ optional arguments:
   --i-really-want-unverified-keys
                         don't verify keys against the provided fingerprint
                         (default: verify keys)
+  --disable-fingerprint-length-check
+                        Disables security length check for the given
+                        fingerprint (default: not active)
   -s, --silent          prints nothing except a key / nothing on failure
                         (default: not active)
   --debug               prints verbose debug information (default: not active)
