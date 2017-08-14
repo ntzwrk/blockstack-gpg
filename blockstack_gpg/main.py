@@ -22,8 +22,9 @@ args = parser.parse_args()
 
 
 
-# Processes PGP keys of a given Blockstack ID and its profile accounts
 def getKeys(accounts, bskId):
+	"""Processes PGP keys of a given Blockstack ID and its profile accounts"""
+
 	keyFound = False
 
 	# Fail when cannot find formatted account data
@@ -68,9 +69,12 @@ def getKeys(accounts, bskId):
 		printInfo("No PGP keys found for \"%s\"" % bskId)
 
 
-# Tries to detect a valid fingerprint, then strips all whitespaces and transforms to upper case
-# Returns the formatted fingerprint or None
 def cleanFingerprint(fingerprint):
+	"""
+	Tries to detect a valid fingerprint, then strips all whitespaces and transforms to upper case
+	Returns the formatted fingerprint or None
+	"""
+
 	fingerprint = fingerprint.replace(" ", "")
 
 	match = re.search("(?:0x)?([0-9a-f]{8,40})", fingerprint, re.IGNORECASE)
@@ -86,9 +90,12 @@ def cleanFingerprint(fingerprint):
 	return cleanedFingerprint
 
 
-# Verifies a key against a given fingerprint, might print some hints
-# Returns True when both match, otherwise False
 def verifyFingerprint(keyData, expectedFingerprint):
+	"""
+	Verifies a key against a given fingerprint, might print some hints
+	Returns True when both match, otherwise False
+	"""
+
 	expectedFingerprint = cleanFingerprint(expectedFingerprint)
 
 	# Try to import key and retrieve fingerprint
@@ -113,13 +120,13 @@ def verifyFingerprint(keyData, expectedFingerprint):
 	return fingerprint.endswith(expectedFingerprint)
 
 
-# Prints only when it should (non-silent mode)
 def printInfo(msg):
+	"""Prints only when it should (non-silent mode)"""
 	if not args.silent:
 		print(msg)
 
-# Prints only when in debug mode
 def printDebug(msg):
+	"""Prints only when in debug mode"""
 	if args.debug:
 		print(msg)
 
