@@ -1,6 +1,9 @@
 #!/usr/bin/env python2
 
-import sys, argparse, urllib2, re
+import argparse
+import urllib2
+import re
+
 import pgpy
 from blockstack_client.profile import profile_list_accounts
 
