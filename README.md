@@ -31,7 +31,7 @@ optional arguments:
                         don't verify keys against the provided fingerprint
                         (default: verify keys)
   --disable-fingerprint-length-check
-                        Disables security length check for the given
+                        disables security length check for the given
                         fingerprint (default: not active)
   -s, --silent          prints nothing except a key / nothing on failure
                         (default: not active)
