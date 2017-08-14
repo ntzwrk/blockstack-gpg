@@ -97,7 +97,7 @@ def cleanFingerprint(fingerprint):
 # Verifies a key against a given fingerprint, might print some hints
 # Returns True when both match, otherwise False
 def verifyFingerprint(keyData, expectedFingerprint):
-	expectedFinerprint = cleanFingerprint(expectedFingerprint)
+	expectedFingerprint = cleanFingerprint(expectedFingerprint)
 
 	# Try to import key and retrieve fingerprint
 	try:
