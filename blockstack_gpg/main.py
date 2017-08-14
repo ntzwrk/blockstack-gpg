@@ -23,19 +23,19 @@ args = parser.parse_args()
 
 
 # Processes PGP keys of a given Blockstack ID and its profile accounts
-def getKeys(accounts, id):
+def getKeys(accounts, bskId):
 	keyFound = False
 
 	# Fail when cannot find formatted account data
 	if not "accounts" in accounts:
 		if not args.silent:
-			print("Couldn't find valid profile information for \"%s\"" % id)
+			print("Couldn't find valid profile information for \"%s\"" % bskId)
 		if args.debug:
 			print("Accounts: %s" % accounts)
 		return;
 
 	if args.debug:
-		print("%s's accounts: %s" % (id, accounts))
+		print("%s's accounts: %s" % (bskId, accounts))
 
 	# Cycle through all accounts...
 	for account in accounts["accounts"]:
@@ -60,19 +60,19 @@ def getKeys(accounts, id):
 				# Print without check when dontVerify is True
 				if args.dontVerify:
 					if not args.silent:
-						print("PGP key for \"%s\":" % id)
+						print("PGP key for \"%s\":" % bskId)
 					print(key)
 				# Verify fingerprints otherwise
 				else:
 					if verifyFingerprint(key, account["identifier"]):
 						if not args.silent:
-							print("PGP key for \"%s\":" % id)
+							print("PGP key for \"%s\":" % bskId)
 						print(key)
 					elif not args.silent:
 						print("Couldn't verify fingerprint against key")
 
 	if not keyFound and not args.silent:
-		print("No PGP keys found for \"%s\"" % id)
+		print("No PGP keys found for \"%s\"" % bskId)
 
 
 # Tries to detect a valid fingerprint, then strips all whitespaces and transforms to upper case
@@ -130,6 +130,6 @@ if args.debug:
 	print("Names to lookup: %s" % args.ids)
 
 # Cycle through all given IDs and process their respective profile information
-for id in args.ids:
-	accounts = profile_list_accounts(id)
-	getKeys(accounts, id)
+for bskId in args.ids:
+	accounts = profile_list_accounts(bskId)
+	getKeys(accounts, bskId)
