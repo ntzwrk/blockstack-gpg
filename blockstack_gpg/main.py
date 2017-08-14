@@ -5,7 +5,7 @@ import urllib2
 import re
 
 import pgpy
-from blockstack_client.profile import profile_list_accounts
+import blockstack_client.profile as blockstackProfile
 
 FINGERPRINT_MIN_LEN = 16
 
@@ -136,5 +136,5 @@ printDebug("Names to lookup: %s" % args.ids)
 
 # Cycle through all given IDs and process their respective profile information
 for bskId in args.ids:
-	accounts = profile_list_accounts(bskId)
+	accounts = blockstackProfile.profile_list_accounts(bskId)
 	getKeys(accounts, bskId)
